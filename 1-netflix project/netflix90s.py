@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 netflix_df = pd.read_csv("netflix_data.csv")
 
 # For dataframe analysis
-#print(netflix_df.dtypes)   # To verify the types of each column
-#print(netflix_df)
+#print(netflix_df.info())
 #print(netflix_df.head())
 
 # Filter movies released in the 90s
@@ -28,3 +27,6 @@ plt.show()
 action_movies = movies90s_df[movies90s_df["genre"] == "Action"]
 short_movie_count = action_movies[action_movies["duration"] < 90].shape[0]
 print("There are", short_movie_count, "short action movies")
+
+# Most prolific directors in the 90s
+print(movies90s_df["director"].value_counts().head(10))
