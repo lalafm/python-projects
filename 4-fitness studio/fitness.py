@@ -20,19 +20,29 @@ fig1.set_size_inches(12, 9)
 ax1.bar(search_summary['year'], search_summary['mean'])
 ax1.set_title('Mean interest in keyword "workout" per year')
 
-workout['month'] = pd.to_datetime(workout['month'])#np.asarray(workout['month'], dtype='datetime64[s]')
+workout['month'] = pd.to_datetime(workout['month'])
 ax2.plot(workout['month'], workout['workout_worldwide'])
 ax2.set_ylabel('Index for popularity of word "workout"')
 ax2.tick_params(rotation=90)
 ax2.set_title('Evolution of search index for "workout" along the years')
 
 # 2: Find most popular keyword during covid and now
-
+keywords['month'] = pd.to_datetime(keywords['month'])
+fig2, ax3 = plt.subplots()
+ax3.plot(keywords['month'], keywords['home_workout_worldwide'], label='home workout')
+ax3.plot(keywords['month'], keywords['gym_workout_worldwide'], label='gym workout')
+ax3.plot(keywords['month'], keywords['home_gym_worldwide'], label='home gym')
+ax3.set_title('Popularity of keywords over period of time')
+ax3.legend()
+# Covid pandemic period according to WHO: 30/01/2020 to 05/05/2023
+# Analysing the graphs we can conclude:
+peak_covid = 'home workout'
+current = 'gym workout'
 
 # 3: Find country with highest interest for workouts among: United States, Australia and Japan
 
 
 # 4: Find, between Philippines and Malaysia which country has highest interest in home workouts
  
- 
+
 plt.show()
