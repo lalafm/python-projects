@@ -2,14 +2,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Load and clean dataframes
 workout = pd.read_csv("data/workout.csv")
 keywords = pd.read_csv("data/three_keywords.csv")
 geo = pd.read_csv("data/workout_geo.csv")
+words_geo = pd.read_csv("data/three_keywords_geo.csv")
+# Remove rows without valid data
+geo.dropna(inplace=True)
+words_geo.dropna(inplace=True)
 
 # 1: Year of peak interest on "workout" 
 workout['year'] = workout['month'].str.split('-').str[0]
 search_summary = workout.groupby('year')['workout_worldwide'].agg(['max', 'mean']).sort_values(by='max', ascending=False).reset_index()
-print('Popularity of search for "workout" keyword')
+print('Popularity of search for "workout" keyword per year')
 print(search_summary)
 year_str = search_summary['year'].iloc[0]
 print('The year interest in word "workout" reached its peak was', year_str)
@@ -40,7 +45,13 @@ peak_covid = 'home workout'
 current = 'gym workout'
 
 # 3: Find country with highest interest for workouts among: United States, Australia and Japan
-
+# Filter the selected countries
+selected_countries = ['United States', 'Australia', 'Japan']
+geo = geo[geo['country'].isin(selected_countries)]
+# Find row
+top_country = geo[(geo['workout_2018_2023'] == geo['workout_2018_2023'].max())]['country'].tolist()[0]
+print('\nCountry with highest interest in workouts is', top_country)
+print(geo)
 
 # 4: Find, between Philippines and Malaysia which country has highest interest in home workouts
  
