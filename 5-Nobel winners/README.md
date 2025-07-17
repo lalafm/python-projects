@@ -15,7 +15,7 @@ Task: Analyze Nobel Prize winner data and identify patterns by answering the fol
     Save your string answers as first_woman_name and first_woman_category.
 
 5. Which individuals or organizations have won more than one Nobel Prize throughout the years?
-    Store the full names in a list named repeat_list.short_movie_count.
+    Store the full names in a list named repeat_list
 
 # The data
 nobel.csv
