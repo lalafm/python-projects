@@ -33,12 +33,13 @@ for i in range(len(nobel_country)):
     else:
         break
 
-# Question 2
-nobel['decade'] = np.floor(nobel['year'] / 10)
+# Question 2: find the decade with the highest ratio of US-born Nobel Prize winners to total winners in all categories
+nobel['decade'] = np.floor(nobel['year'] / 10).astype(int)
 usa_winners = nobel[nobel['birth_country'] == 'United States of America']
 ratios = (usa_winners['decade'].value_counts() / nobel['decade'].value_counts())
+print('\nRatio of US-born winners over the decades:')
 print(ratios)
-max_decade_usa = int(ratios[ratios == ratios.max()].index[0])
+max_decade_usa = ratios[ratios == ratios.max()].index[0]
 
 # To visualize the proportions
 fig1, ax1 = plt.subplots()
@@ -48,11 +49,20 @@ ax1.set_xlabel('Decade')
 ax1.set_ylabel('Count')
 ax1.legend()
 
-# Question 3
+# Question 3: find the decade and Nobel Prize category combination with the highest proportion of female laureates
+nobel['female_winners'] = nobel['sex']=='Female'
+nobel_grouped = nobel.groupby(['decade', 'category'], as_index=False)['female_winners'].mean().sort_values(by='female_winners', ascending=False)
+max_female_dict = {nobel_grouped['decade'].iloc[0]:nobel_grouped['category'].iloc[0]}
+print(f'\nThe decade-category with highest prportion of female winners is  {next(iter(max_female_dict.items()))}')
 
-# Question 4
+# Question 4: find the first woman to receive a Nobel Prize and in which category
+# Filter the dataframe to have only females and sort by year
+nobel_fem_filter = nobel[nobel['sex'] == 'Female'].sort_values(by='year')
+first_woman_name = nobel_fem_filter['full_name'].iloc[0]
+first_woman_category = nobel_fem_filter['category'].iloc[0]
+print(f'\nThe first female winner was {first_woman_name} in the category {first_woman_category}')
 
 # Question 5
 
 
-plt.show()
+#plt.show()
