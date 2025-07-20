@@ -1,6 +1,7 @@
 # Importing libraries
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 
 # Load dataframes
@@ -34,7 +35,7 @@ for i in range(len(nobel_country)):
         break
 
 # Question 2: find the decade with the highest ratio of US-born Nobel Prize winners to total winners in all categories
-nobel['decade'] = np.floor(nobel['year'] / 10).astype(int)
+nobel['decade'] = (np.floor(nobel['year'] / 10) * 10).astype(int)
 usa_winners = nobel[nobel['birth_country'] == 'United States of America']
 ratios = (usa_winners['decade'].value_counts() / nobel['decade'].value_counts())
 print('\nRatio of US-born winners over the decades:')
@@ -43,8 +44,8 @@ max_decade_usa = ratios[ratios == ratios.max()].index[0]
 
 # To visualize the proportions
 fig1, ax1 = plt.subplots()
-ax1.bar(ratios.index, nobel['decade'].value_counts().sort_index(), label='Total winners')
-ax1.bar(ratios.index, usa_winners['decade'].value_counts().sort_index(), label='USA winners')
+ax1.bar(ratios.index, nobel['decade'].value_counts().sort_index(), label='Total winners', width=5)
+ax1.bar(ratios.index, usa_winners['decade'].value_counts().sort_index(), label='USA winners', width=5)
 ax1.set_xlabel('Decade')
 ax1.set_ylabel('Count')
 ax1.legend()
@@ -62,7 +63,15 @@ first_woman_name = nobel_fem_filter['full_name'].iloc[0]
 first_woman_category = nobel_fem_filter['category'].iloc[0]
 print(f'\nThe first female winner was {first_woman_name} in the category {first_woman_category}')
 
-# Question 5
+# Question 5: find which individuals or organizations have won more than one Nobel Prize throughout the years
+repeat_list = []
+nobel_winners_count = nobel.value_counts('full_name').sort_values(ascending=False)
+for i in range(len(nobel_winners_count)):
+    if nobel_winners_count[i] > 1:
+        repeat_list.append(nobel_winners_count.index[i])
+    else:
+        break
+print("\nCompanies or individuals that won a Nobel prize more than once:")
+print(repeat_list)
 
-
-#plt.show()
+plt.show()
