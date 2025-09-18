@@ -9,10 +9,9 @@ def process_file(filepath, columns, relevant_file_path):
         relevant_categories = file.read().splitlines()
         file.close()
 
-    # Fix relevant fields with multiple (comma-separated) values
+    # Fix categories_tags field with multiple (comma-separated) values
     df['categories_tags'] = df['categories_tags'].str.split(',')
-    #df['origins_tags'] = df['origins_tags'].str.split(',')
-    
+
     # Remove rows with missing values for relevant columns
     df.dropna(subset=['categories_tags', 'origins_tags'], inplace=True)
 
@@ -23,9 +22,18 @@ def process_file(filepath, columns, relevant_file_path):
     # Fix the multiple nomenclature for italy
     df['origins_tags'] = df['origins_tags'].replace(['en:produced-in-italy', 'en:produce-of-italy'], 'en:italy')
 
-    # Get the country of origin with higher count - to do: if there is a tie
+    # Get the country/countries of origin with higher count
     print(df['origins_tags'].value_counts())
-    top_origin_country = df['origins_tags'].value_counts().index[0].lstrip('en:').replace('-', ' ')
+
+    top_origin_country = []
+    origin_count = df['origins_tags'].value_counts() 
+    max = origin_count.iloc[0]
+    # In case there is more than one value at the top
+    for i in range(len(origin_count)):
+        if origin_count.iloc[i] == max:
+            top_origin_country.append(origin_count.index[i].lstrip('en:').replace('-', ' '))
+        else:
+            break
 
     return top_origin_country
 
