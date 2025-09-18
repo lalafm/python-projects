@@ -20,8 +20,11 @@ def process_file(filepath, columns, relevant_file_path):
     df = df[df['categories_tags'].apply(lambda x: any([i for i in x if i in relevant_categories]))]
     df = df[df['countries'] == 'United Kingdom']
 
-    # Get the country of origin with higher count
-    #print(df['origins_tags'].value_counts())
+    # Fix the multiple nomenclature for italy
+    df['origins_tags'] = df['origins_tags'].replace(['en:produced-in-italy', 'en:produce-of-italy'], 'en:italy')
+
+    # Get the country of origin with higher count - to do: if there is a tie
+    print(df['origins_tags'].value_counts())
     top_origin_country = df['origins_tags'].value_counts().index[0].lstrip('en:').replace('-', ' ')
 
     return top_origin_country
